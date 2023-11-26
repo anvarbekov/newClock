@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Days & Week</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Artifika&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Artifika", serif;
+      }
+      .days {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100vh;
+        background: linear-gradient(45deg, #222831, #2a3444);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+      }
+      #fulldate,
+      #week {
+        background: linear-gradient(45deg, rgb(187, 10, 122), teal);
+        font-size: 3rem;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+      }
+      #week {
+        background: linear-gradient(45deg, rgb(0, 255, 162), rgb(220, 20, 130));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      span {
+        background: linear-gradient(45deg, rgb(0, 255, 162), rgb(220, 20, 130));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: hidden 0.5s;
+        visibility: hidden;
+        transform: scale(1);
+      }
+      .btn {
+        padding: 0.6rem 2.5rem;
+        font-size: 1.2rem;
+        margin-top: 10px;
+        border-radius: 10px 5px 10px 5px;
+        border: 1px solid teal;
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        transition: 0.5s ease;
+      }
+      .btn:hover {
+        background-color: teal;
+      }
+      /* Modal window */
+      .overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: rgba(17, 23, 33, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal {
+        width: 30rem;
+        height: 10rem;
+        background-color: rgba(249, 220, 3, 0.4);
+        background-color: rgba(21, 45, 46, 0.7);
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .hidden {
+        display: none;
+      }
+
+      .active {
+        filter: blur(5px);
+      }
+      small {
+        position: absolute;
+        bottom: 2px;
+        text-align: center;
+        color: crimson;
+      }
+      .dev__title,
+      .feel {
+        color: white;
+      }
+
+      /* Modal window */
+
+      @keyframes hidden {
+        0% {
+          visibility: visible;
+        }
+        100% {
+          visibility: hidden;
+        }
+      }
+      @media (max-width: 450px) {
+        html {
+          font-size: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="days">
+      <h1 id="week">Days of the week</h1>
+      <h1 id="fulldate">hh:mm:ss dd.mm.yyyy</h1>
+      <button class="btn">Click me</button>
+    </div>
+
+    <div class="overlay hidden"></div>
+    <div class="modal hidden">
+      <h2 class="feel">Kuningiz xayrli o'tsin 💖!</h2>
+      <small>Chiqish uchun soyani bosing</small>
+    </div>
+
+    <script>
+      /* ------------------------ Date function ------------------------ */
+
+      function nowDate() {
+        const now = new Date();
+
+        /* ------------------------ Full time function ------------------------ */
+
+        const date = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+        const month =
+          now.getMonth() + 1 < 10
+            ? "0" + now.getMonth() + 1
+            : now.getMonth() + 1;
+        const years = now.getFullYear();
+
+        const hours =
+          now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+        const minute =
+          now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+        const seconds =
+          now.getSeconds() < 10 ? "0" + now.getSeconds() : now.getSeconds();
+
+        return `${hours}<span>:</span>${minute}<span>:</span>${seconds}, ${date}.${month}.${years}`;
+      }
+      setInterval(nowDate, 1000);
+      /* ------------------------ Full time function ------------------------ */
+      const fulldate = document.getElementById("fulldate");
+      setInterval(() => {
+        fulldate.innerHTML = nowDate();
+      }, 1000);
+
+      /* ------------------------ Week function ------------------------ */
+      const now = new Date();
+      day = now.getDay();
+      const week = document.getElementById("week");
+      switch (day) {
+        case 0:
+          day = "Yakshanba";
+          break;
+        case 1:
+          day = "Dushanba";
+          break;
+        case 2:
+          day = "Seshanba";
+          break;
+        case 3:
+          day = "Chorshanba";
+          break;
+        case 4:
+          day = "Payshanba";
+          break;
+        case 5:
+          day = "Juma";
+          break;
+        case 6:
+          day = "Shanba";
+          break;
+        default:
+          day = "Days of the week";
+          break;
+      }
+      week.textContent = day;
+
+      /* ------------------------ MOdal function ------------------------ */
+      const overlay = document.querySelector(".overlay");
+      const modal = document.querySelector(".modal");
+      const days = document.querySelector(".days");
+      const btn = document.querySelector(".btn");
+      btn.addEventListener("click", () => {
+        days.classList.add("active");
+        overlay.classList.remove("hidden");
+        modal.classList.remove("hidden");
+      });
+      overlay.addEventListener("click", () => {
+        days.classList.remove("active");
+        overlay.classList.add("hidden");
+        modal.classList.add("hidden");
+      });
+
+      /* ------------------------ Date function ------------------------ */
+    </script>
+  </body>
+</html>
